@@ -23,7 +23,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
-});
+}, cell.type === 'th' ? null : cell.props.children);
 
 const isEmpty = (cells: JSX.Element[][] | null) =>
     !cells ||
