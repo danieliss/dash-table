@@ -97,7 +97,7 @@ class Wrappers {
      */
     private wrapper = memoizerCache<[number, number]>()((
         active: boolean,
-        classes: string,
+        className: string,
         columnIndex: number,
         columnId: ColumnId,
         rowIndex: number,
@@ -112,7 +112,7 @@ class Wrappers {
             'data-dash-column': columnId,
             'data-dash-row': rowIndex
         }}
-        classes={classes}
+        className={className}
         key={`column-${columnIndex}`}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
