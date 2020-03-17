@@ -61,9 +61,9 @@ describe(`edit, mode=${AppMode.Typed}`, () => {
                 cy.stub(win, 'prompt').returns('Chill');
             });
             // hide 3 columns - one at the start of a merged set, one in the middle, one not in the set
-            cy.get('.column-8 .column-header--hide').click({force: true});
-            cy.get('.column-6 .column-header--hide').click({force: true});
-            cy.get('.column-1 .column-header--hide').click({force: true});
+            cy.get('.column-8:not(.phantom-cell) .column-header--hide').click({force: true});
+            cy.get('.column-6:not(.phantom-cell) .column-header--hide').click({force: true});
+            cy.get('.column-1:not(.phantom-cell) .column-header--hide').click({force: true});
             // edit the merged name
             cy.get('.dash-header.column-5 .column-header--edit').eq(1).click({force: true});
             // re-show the hidden columns
