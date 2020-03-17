@@ -56,7 +56,7 @@ class Wrappers {
             const active = isActiveCell(activeCell, i + offset.rows, j + offset.columns);
 
             wrappers[i][j] = React.cloneElement(w, {
-                classes: w.props.classes + ' cell--selected' + (active ? ' focused' : '')
+                className: w.props.className + ' cell--selected' + (active ? ' focused' : '')
             });
 
         }, selectedCells);
@@ -72,7 +72,7 @@ class Wrappers {
         column: IColumn
     ) {
         const isDropdown = column.presentation === Presentation.Dropdown;
-        const classes = 'dash-cell' +
+        const className = 'dash-cell' +
             ` column-${columnIndex}` +
             (active ? ' focused' : '') +
             (selected ? ' cell--selected' : '') +
@@ -80,7 +80,7 @@ class Wrappers {
 
         return this.wrapper.get(rowIndex, columnIndex)(
             active,
-            classes,
+            className,
             columnIndex,
             column.id,
             rowIndex,
