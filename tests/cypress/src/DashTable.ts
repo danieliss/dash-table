@@ -107,15 +107,15 @@ export class DashTableHelper {
     }
 
     public getCellInLastRowOfColumn(column: number) {
-        const cellInLastRow = cy.get(`td.dash-cell.column-${column}`).last().then(elem => {
+        const cellInLastRow = cy.get(`td.dash-cell.column-${column}:not(.phantom-cell)`).last().then(elem => {
             const lastRow = elem ? elem.attr(`data-dash-row`) : undefined;
-            return lastRow ? cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}"`) : undefined;
+            return lastRow ? cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}]:not(.phantom-cell)"`) : undefined;
         });
         return cellInLastRow;
     }
 
     public getCellFromDataDash(row: number, column: number) {
-        return cy.get(`td.column-${column}[data-dash-row="${row}"]`);
+        return cy.get(`td.column-${column}[data-dash-row="${row}"]:not(.phantom-cell)`);
     }
 
     public toggleScroll(toggled: boolean) {
