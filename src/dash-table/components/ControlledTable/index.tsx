@@ -270,10 +270,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 const width = lastTdBounds.right - r1c0FragmentBounds.left;
 
-                r0c0.style.width = `${width}px`;
-                r0c0.style.overflow = 'hidden';
-                r1c0.style.width = `${width}px`;
-                r1c0.style.overflow = 'hidden';
+                this.stylesheet.setRule('.cell.cell-0-0', `width: ${width}px; overflow: hidden;`);
+                this.stylesheet.setRule('.cell.cell-1-0', `width: ${width}px; overflow: hidden;`);
             }
 
             const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns + 1})`);
@@ -283,9 +281,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 const width = firstTdBounds.left - r1c1FragmentBounds.left;
 
-                r1c1.style.marginLeft = `${-width}px`;
-                r0c1.style.marginLeft = `${-width}px`;
-
+                this.stylesheet.setRule('.cell.cell-0-1', `margin-left: ${-width}px;`);
+                this.stylesheet.setRule('.cell.cell-1-1', `margin-left: ${-width}px;`);
             }
 
         }
