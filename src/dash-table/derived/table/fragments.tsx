@@ -25,6 +25,11 @@ const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
 }, cell.type === 'th' ? null : cell.props.children);
 
+const getLastOfType = (cell: JSX.Element) => React.cloneElement(cell, {
+    ...cell.props,
+    className: cell.props.className ? `${cell.props.className} last-of-type` : 'last-of-type'
+});
+
 const isEmpty = (cells: JSX.Element[][] | null) =>
     !cells ||
     cells.length === 0 ||
@@ -51,7 +56,10 @@ export default memoizeOneFactory((
                 row as any
             ).cells;
 
-            return row.slice(0, pivot).concat(row.slice(pivot).map(getHiddenCell));
+            const res = row.slice(0, pivot).concat(row.slice(pivot).map(getHiddenCell));
+            res[pivot - 1] = getLastOfType(res[pivot - 1]);
+
+            return res;
         }, cells) :
         null;
 
