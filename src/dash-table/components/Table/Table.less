@@ -292,11 +292,16 @@
                 overflow: hidden;
             }
 
+            td, th {
+                &.last-of-type {
+                    border-right: none !important;
+                }
+            }
+
             &:not(.dash-empty-01) {
                 .cell-0-0,
                 .cell-1-0 {
                     tr {
-                        .last-of-type,
                         td:last-of-type,
                         th:last-of-type {
                             border-right: none !important;
