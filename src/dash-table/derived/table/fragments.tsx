@@ -30,6 +30,11 @@ const getLastOfType = (cell: JSX.Element) => React.cloneElement(cell, {
     className: cell.props.className ? `${cell.props.className} last-of-type` : 'last-of-type'
 });
 
+const getFirstPhantom = (cell: JSX.Element) => React.cloneElement(cell, {
+    ...cell.props,
+    style: { ...cell.props.style, borderLeft: 'transparent' }
+});
+
 const isEmpty = (cells: JSX.Element[][] | null) =>
     !cells ||
     cells.length === 0 ||
@@ -58,6 +63,7 @@ export default memoizeOneFactory((
 
             const res = row.slice(0, pivot).concat(row.slice(pivot).map(getHiddenCell));
             res[pivot - 1] = getLastOfType(res[pivot - 1]);
+            res[pivot] = getFirstPhantom(res[pivot]);
 
             return res;
         }, cells) :
