@@ -226,6 +226,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     handleResize = (force: boolean = false) => {
         const {
+            fixed_columns,
             forcedResizeOnly,
             setState
         } = this.props;
@@ -261,30 +262,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tr.style.height = getComputedStyle(tr2).height;
         });
 
-        const { fixed_columns } = this.props;
         if (fixed_columns) {
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns})`);
             if (lastVisibleTd) {
                 const r1c0FragmentBounds = r1c0.getBoundingClientRect();
                 const lastTdBounds = lastVisibleTd.getBoundingClientRect();
-
                 const width = lastTdBounds.right - r1c0FragmentBounds.left;
 
-                this.stylesheet.setRule('.cell.cell-0-0', `width: ${width}px;`);
-                this.stylesheet.setRule('.cell.cell-1-0', `width: ${width}px;`);
+                r0c0.style.width = `${width}px`;
+                r1c0.style.width = `${width}px`;
             }
-
-            const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns + 1})`);
-            if (firstVisibleTd) {
-                const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                const firstTdBounds = firstVisibleTd.getBoundingClientRect();
-
-                const width = firstTdBounds.left - r1c1FragmentBounds.left;
-
-                this.stylesheet.setRule('.cell.cell-0-1', `margin-left: ${-width}px;`);
-                this.stylesheet.setRule('.cell.cell-1-1', `margin-left: ${-width}px;`);
-            }
-
         }
     }
 

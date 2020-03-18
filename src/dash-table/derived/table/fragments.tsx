@@ -23,11 +23,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
-}, (
-    cell.type === 'th' ||
-    (cell.type === 'td' && cell.props.className && cell.props.className.indexOf('dash-select-cell') !== -1) ||
-    (cell.type === 'td' && cell.props.className && cell.props.className.indexOf('dash-delete-cell') !== -1)
-) ? null : cell.props.children);
+}, cell.type === 'th' ? null : cell.props.children);
 
 const isEmpty = (cells: JSX.Element[][] | null) =>
     !cells ||
@@ -74,7 +70,7 @@ export default memoizeOneFactory((
                 row as any
             ).cells;
 
-            return row.slice(0, pivot).map(getHiddenCell).concat(row.slice(pivot));
+            return row.slice(pivot);
         }, cells);
 
     // slice out fixed rows
