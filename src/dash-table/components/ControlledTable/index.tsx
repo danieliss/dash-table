@@ -263,7 +263,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
-            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns})`);
+            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
             if (lastVisibleTd) {
                 const r1c0FragmentBounds = r1c0.getBoundingClientRect();
                 const lastTdBounds = lastVisibleTd.getBoundingClientRect();
@@ -667,7 +667,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 this.stylesheet.setRule(
                     `.dash-fixed-row:not(.dash-fixed-column) th.${classname}`,
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
+                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important; box-sizing: border-box;`
                 );
             });
         }
