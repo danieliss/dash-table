@@ -48,9 +48,9 @@ describe('filter', () => {
     });
 
     it('handles hovering onto other filtering cells', () => {
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`gt 100`);
-        DashTable.getFilterInputById('ddd').click();
+        DashTable.getFilterInputById('ddd').click({ force: true });
         DOM.focused.type('lt 20000');
 
         DashTable.getCellById(0, 'eee').trigger('mouseover');
@@ -71,13 +71,13 @@ describe('filter', () => {
             .within(() => cy.get('.dash-cell-value')
                 .then($el => cell_1 = $el[0].innerHTML));
 
-        DashTable.getFilterInputById('ddd').click();
+        DashTable.getFilterInputById('ddd').click({ force: true });
         DOM.focused.type('"20 a000');
-        DashTable.getFilterInputById('eee').click();
+        DashTable.getFilterInputById('eee').click({ force: true });
         DOM.focused.type('is prime2');
-        DashTable.getFilterInputById('bbb').click();
+        DashTable.getFilterInputById('bbb').click({ force: true });
         DOM.focused.type('! !"');
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
@@ -92,18 +92,18 @@ describe('filter', () => {
     });
 
     it('filters `Text` columns with `contains` without operator', () => {
-        DashTable.getFilterInputById('bbb').click();
+        DashTable.getFilterInputById('bbb').click({ force: true });
         DOM.focused.type('Tr');
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
 
         DashTable.getFilterInputById('bbb').should('have.value', 'Tr');
         DashTable.getCellById(0, 'bbb-readonly').within(() => cy.get('.dash-cell-value').should('have.html', 'label: Tropical Beaches'));
     });
 
     it('filters `Numeric` columns with `equal` without operator', () => {
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type('100');
-        DashTable.getFilterInputById('bbb').click();
+        DashTable.getFilterInputById('bbb').click({ force: true });
 
         DashTable.getFilterInputById('ccc').should('have.value', '100');
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '100'));
@@ -113,14 +113,14 @@ describe('filter', () => {
         DashTable.getCellById(2, 'ccc').click();
         DOM.focused.type(`le5${Key.Enter}`);
 
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`le5${Key.Enter}`);
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', 'le5'));
         DashTable.getCellById(0, 'rows').within(() => cy.get('.dash-cell-value').should('have.html', '3'));
 
         cy.get('.clear-filters').click();
 
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`le 5${Key.Enter}`);
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '1'));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '2'));
@@ -129,7 +129,7 @@ describe('filter', () => {
     });
 
     it('uses symbol relational operators that are not followed by a space', () => {
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`<=5${Key.Enter}`);
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '1'));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '2'));
@@ -139,11 +139,11 @@ describe('filter', () => {
     });
 
     it('typing invalid followed by valid query fragment does not reset invalid', () => {
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`is prime2`);
-        DashTable.getFilterInputById('ddd').click();
+        DashTable.getFilterInputById('ddd').click({ force: true });
         DOM.focused.type('lt 20000');
-        DashTable.getFilterInputById('eee').click();
+        DashTable.getFilterInputById('eee').click({ force: true });
 
         DashTable.getFilterInputById('ccc').should('have.value', 'is prime2');
         DashTable.getFilterInputById('ddd').should('have.value', 'lt 20000');
@@ -161,15 +161,15 @@ describe('filter', () => {
             .within(() => cy.get('.dash-cell-value')
                 .then($el => cell_1 = $el[0].innerHTML));
 
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
         DOM.focused.type(`gt 100`);
-        DashTable.getFilterInputById('ddd').click();
+        DashTable.getFilterInputById('ddd').click({ force: true });
         DOM.focused.type('lt 20000');
-        DashTable.getFilterInputById('eee').click();
+        DashTable.getFilterInputById('eee').click({ force: true });
         DOM.focused.type('is prime');
-        DashTable.getFilterInputById('bbb').click();
+        DashTable.getFilterInputById('bbb').click({ force: true });
         DOM.focused.type(`Wet`);
-        DashTable.getFilterInputById('ccc').click();
+        DashTable.getFilterInputById('ccc').click({ force: true });
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '109'));
