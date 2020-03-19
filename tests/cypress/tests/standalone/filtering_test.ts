@@ -10,25 +10,25 @@ describe(`filter special characters`, () => {
         DashTable.toggleScroll(false);
     });
 
-    it('can filter on special column id', () => {
-        DashTable.getFilterById('b+bb').click();
+    it.only('can filter on special column id', () => {
+        DashTable.getFilterById('b+bb').click({ force: true });
         DOM.focused.type(`Wet${Key.Enter}`);
 
-        DashTable.getFilterById('c cc').click();
+        DashTable.getFilterById('c cc').click({ force: true });
         DOM.focused.type(`gt 90${Key.Enter}`);
 
-        DashTable.getFilterById('d:dd').click();
+        DashTable.getFilterById('d:dd').click({ force: true });
         DOM.focused.type(`lt 12500${Key.Enter}`);
 
-        DashTable.getFilterById('e-ee').click();
+        DashTable.getFilterById('e-ee').click({ force: true });
         DOM.focused.type(`is prime${Key.Enter}`);
 
-        DashTable.getFilterById('f_ff').click();
+        DashTable.getFilterById('f_ff').click({ force: true });
         DOM.focused.type(`le 106${Key.Enter}`);
 
-        DashTable.getFilterById('g.gg').click();
+        DashTable.getFilterById('g.gg').click({ force: true });
         DOM.focused.type(`gt 1000${Key.Enter}`);
-        DashTable.getFilterById('b+bb').click();
+        DashTable.getFilterById('b+bb').click({ force: true });
 
         DashTable.getCellById(0, 'rows').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'rows').should('not.exist');
