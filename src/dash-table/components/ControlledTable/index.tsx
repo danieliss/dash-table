@@ -667,7 +667,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 this.stylesheet.setRule(
                     `.dash-fixed-row:not(.dash-fixed-column) th.${classname}`,
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important; box-sizing: border-box;`
+                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
                 );
             });
         }
