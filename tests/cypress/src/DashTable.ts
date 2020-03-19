@@ -32,12 +32,20 @@ export class DashTableHelper {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td[data-dash-column="${column}"]:not(.phantom-cell)`).eq(row);
     }
 
-    public getFilter(column: number, editable: State = State.Ready) {
+    public getFilterInput(column: number, editable: State = State.Ready) {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell) input`);
     }
 
-    public getFilterById(column: string, editable: State = State.Ready) {
+    public getFilterInputById(column: string, editable: State = State.Ready) {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]:not(.phantom-cell) input`);
+    }
+
+    public getFilter(column: number, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell)`);
+    }
+
+    public getFilterById(column: string, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]:not(.phantom-cell)`);
     }
 
     public getHeader(row: number, column: number, editable: State = State.Ready) {
