@@ -10,34 +10,34 @@ describe(`filter special characters`, () => {
         DashTable.toggleScroll(false);
     });
 
-    it.only('can filter on special column id', () => {
-        DashTable.getFilterById('b+bb').click({ force: true });
+    it('can filter on special column id', () => {
+        DashTable.getFilterById('b+bb').click();
         DOM.focused.type(`Wet${Key.Enter}`);
 
-        DashTable.getFilterById('c cc').click({ force: true });
+        DashTable.getFilterById('c cc').click();
         DOM.focused.type(`gt 90${Key.Enter}`);
 
-        DashTable.getFilterById('d:dd').click({ force: true });
+        DashTable.getFilterById('d:dd').click();
         DOM.focused.type(`lt 12500${Key.Enter}`);
 
-        DashTable.getFilterById('e-ee').click({ force: true });
+        DashTable.getFilterById('e-ee').click();
         DOM.focused.type(`is prime${Key.Enter}`);
 
-        DashTable.getFilterById('f_ff').click({ force: true });
+        DashTable.getFilterById('f_ff').click();
         DOM.focused.type(`le 106${Key.Enter}`);
 
-        DashTable.getFilterById('g.gg').click({ force: true });
+        DashTable.getFilterById('g.gg').click();
         DOM.focused.type(`gt 1000${Key.Enter}`);
-        DashTable.getFilterById('b+bb').click({ force: true });
+        DashTable.getFilterById('b+bb').click();
 
         DashTable.getCellById(0, 'rows').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'rows').should('not.exist');
-        DashTable.getFilterById('b+bb').within(() => cy.get('input').should('have.value', 'Wet'));
-        DashTable.getFilterById('c cc').within(() => cy.get('input').should('have.value', 'gt 90'));
-        DashTable.getFilterById('d:dd').within(() => cy.get('input').should('have.value', 'lt 12500'));
-        DashTable.getFilterById('e-ee').within(() => cy.get('input').should('have.value', 'is prime'));
-        DashTable.getFilterById('f_ff').within(() => cy.get('input').should('have.value', 'le 106'));
-        DashTable.getFilterById('g.gg').within(() => cy.get('input').should('have.value', 'gt 1000'));
+        DashTable.getFilterById('b+bb').should('have.value', 'Wet');
+        DashTable.getFilterById('c cc').should('have.value', 'gt 90');
+        DashTable.getFilterById('d:dd').should('have.value', 'lt 12500');
+        DashTable.getFilterById('e-ee').should('have.value', 'is prime');
+        DashTable.getFilterById('f_ff').should('have.value', 'le 106');
+        DashTable.getFilterById('g.gg').should('have.value', 'gt 1000');
     });
 });
 
@@ -55,8 +55,8 @@ describe('filter', () => {
 
         DashTable.getCellById(0, 'eee').trigger('mouseover');
 
-        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt 100'));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
+        DashTable.getFilterById('ccc').should('have.value', 'gt 100');
+        DashTable.getFilterById('ddd').should('have.value', 'lt 20000');
     });
 
     it('handles invalid queries', () => {
@@ -82,9 +82,9 @@ describe('filter', () => {
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
 
-        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', '! !"'));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', '"20 a000'));
-        DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime2'));
+        DashTable.getFilterById('bbb').should('have.value', '! !"');
+        DashTable.getFilterById('ddd').should('have.value', '"20 a000');
+        DashTable.getFilterById('eee').should('have.value', 'is prime2');
 
         DashTable.getFilterById('bbb').should('have.class', 'invalid');
         DashTable.getFilterById('ddd').should('have.class', 'invalid');
@@ -96,7 +96,7 @@ describe('filter', () => {
         DOM.focused.type('Tr');
         DashTable.getFilterById('ccc').click();
 
-        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', 'Tr'));
+        DashTable.getFilterById('bbb').should('have.value', 'Tr');
         DashTable.getCellById(0, 'bbb-readonly').within(() => cy.get('.dash-cell-value').should('have.html', 'label: Tropical Beaches'));
     });
 
@@ -105,7 +105,7 @@ describe('filter', () => {
         DOM.focused.type('100');
         DashTable.getFilterById('bbb').click();
 
-        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', '100'));
+        DashTable.getFilterById('ccc').should('have.value', '100');
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '100'));
     });
 
@@ -145,8 +145,8 @@ describe('filter', () => {
         DOM.focused.type('lt 20000');
         DashTable.getFilterById('eee').click();
 
-        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'is prime2'));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
+        DashTable.getFilterById('ccc').should('have.value', 'is prime2');
+        DashTable.getFilterById('ddd').should('have.value', 'lt 20000');
     });
 
     it('reset updates results and filter fields', () => {
@@ -174,19 +174,19 @@ describe('filter', () => {
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '109'));
 
-        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', 'Wet'));
-        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt 100'));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
-        DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime'));
+        DashTable.getFilterById('bbb').should('have.value', 'Wet');
+        DashTable.getFilterById('ccc').should('have.value', 'gt 100');
+        DashTable.getFilterById('ddd').should('have.value', 'lt 20000');
+        DashTable.getFilterById('eee').should('have.value', 'is prime');
 
         cy.get('.clear-filters').click();
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
 
-        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', ''));
+        DashTable.getFilterById('bbb').should('have.value', '');
+        DashTable.getFilterById('ccc').should('have.value', '');
+        DashTable.getFilterById('ddd').should('have.value', '');
+        DashTable.getFilterById('eee').should('have.value', '');
     });
 });
