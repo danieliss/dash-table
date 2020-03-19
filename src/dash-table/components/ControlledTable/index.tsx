@@ -720,11 +720,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     onScroll = (ev: any) => {
-        const { r0c1, r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c1 } = this.refs as { [key: string]: HTMLElement };
 
         Logger.trace(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
 
-        r0c1.style.marginLeft = `calc(${-ev.target.scrollLeft}px + ${r1c1.style.marginLeft})`;
+        r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
 
         this.updateUiViewport();
         this.handleDropdown();
