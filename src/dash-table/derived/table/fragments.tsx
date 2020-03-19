@@ -23,7 +23,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
-}, cell.props.children);
+}, cell.type !== 'th' && cell.type !== 'td' ? cell.props.children : null);
 
 const getFixedColSpan = (cell: JSX.Element, maxColSpan: number) => React.cloneElement(cell, {
     ...cell.props,
@@ -89,7 +89,7 @@ export default memoizeOneFactory((
                 row as any
             ).cells;
 
-            return row.slice(pivot);
+            return row.slice(0, pivot).map(getHiddenCell).concat(row.slice(pivot));
         }, cells);
 
     // slice out fixed rows
