@@ -48,6 +48,9 @@ const INNER_STYLE = {
     minWidth: '100%'
 };
 
+const WIDTH_EPSILON = 1;
+const MAX_WIDTH_ITERATIONS = 6;
+
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly menuRef = React.createRef<HTMLDivElement>();
     private readonly stylesheet: Stylesheet = new Stylesheet(`#${this.props.id}`);
@@ -263,52 +266,72 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
-            // Force first column containers width to match visible portion of table
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
-            if (lastVisibleTd) {
-                const r1c0FragmentBounds = r1c0.getBoundingClientRect();
-                const lastTdBounds = lastVisibleTd.getBoundingClientRect();
-                const width = lastTdBounds.right - r1c0FragmentBounds.left;
-
-                r0c0.style.width = `${width}px`;
-                r1c0.style.width = `${width}px`;
-            }
-
-            // Force second column containers width to match visible portion of table
             const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
-            if (firstVisibleTd) {
-                const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                const firstTdBounds = firstVisibleTd.getBoundingClientRect();
 
-                const width = firstTdBounds.left - r1c1FragmentBounds.left;
-
-                r0c1.style.marginLeft = `${-width}px`;
-                r0c1.style.marginRight = `${width}px`;
-                r1c1.style.marginLeft = `${-width}px`;
-                r1c1.style.marginRight = `${width}px`;
-            }
-
-            // Make all fragment tables the same width
+            const r0c0Table = r0c0.querySelector('table');
+            const r0c1Table = r0c1.querySelector('table');
+            const r1c0Table = r1c0.querySelector('table');
             const r1c1Table = r1c1.querySelector('table');
-            if (r1c1Table) {
-                const r0c0Table = r0c0.querySelector('table');
-                const r0c1Table = r0c1.querySelector('table');
-                const r1c0Table = r1c0.querySelector('table');
 
-                const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
+            let it = 0;
+            let currentWidth = r1c0.getBoundingClientRect().width;
+            let lastWidth = currentWidth;
 
-                if (r0c0Table) {
-                    r0c0Table.style.width = r1c1TableWidth;
+            do {
+                lastWidth = currentWidth
+
+                // Force first column containers width to match visible portion of table
+                if (lastVisibleTd) {
+                    const r1c0FragmentBounds = r1c0.getBoundingClientRect();
+                    const lastTdBounds = lastVisibleTd.getBoundingClientRect();
+                    currentWidth = lastTdBounds.right - r1c0FragmentBounds.left;
+
+                    const width = `${currentWidth}px`;
+
+                    r0c0.style.width = width;
+                    r1c0.style.width = width;
                 }
 
-                if (r0c1Table) {
-                    r0c1Table.style.width = r1c1TableWidth;
+                // Force second column containers width to match visible portion of table
+                if (firstVisibleTd) {
+                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+
+                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
+
+                    r0c1.style.marginLeft = `${-width}px`;
+                    r0c1.style.marginRight = `${width}px`;
+                    r1c1.style.marginLeft = `${-width}px`;
+                    r1c1.style.marginRight = `${width}px`;
                 }
 
-                if (r1c0Table) {
-                    r1c0Table.style.width = r1c1TableWidth;
+                // Make all fragment tables the same width
+                if (r1c1Table) {
+                    const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
+
+                    if (r0c0Table) {
+                        r0c0Table.style.width = r1c1TableWidth;
+                    }
+
+                    if (r0c1Table) {
+                        r0c1Table.style.width = r1c1TableWidth;
+                    }
+
+                    if (r1c0Table) {
+                        r1c0Table.style.width = r1c1TableWidth;
+                    }
                 }
-            }
+
+                it++;
+
+                if (
+                    (Math.abs(currentWidth - lastWidth) < WIDTH_EPSILON && it % 2 === 0) ||
+                    it >= MAX_WIDTH_ITERATIONS
+                ) {
+                    break;
+                }
+            } while (true);
         }
     }
 
