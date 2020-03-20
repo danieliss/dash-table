@@ -289,16 +289,26 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             }
 
             // Make all fragment tables the same width
-            const r0c0Table: any = r0c0.querySelector('table');
-            const r0c1Table: any = r0c1.querySelector('table');
-            const r1c0Table: any = r1c0.querySelector('table');
-            const r1c1Table: any = r1c1.querySelector('table');
+            const r1c1Table = r1c1.querySelector('table');
+            if (r1c1Table) {
+                const r0c0Table = r0c0.querySelector('table');
+                const r0c1Table = r0c1.querySelector('table');
+                const r1c0Table = r1c0.querySelector('table');
 
-            const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
+                const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
 
-            r0c0Table.style.width = r1c1TableWidth;
-            r0c1Table.style.width = r1c1TableWidth;
-            r1c0Table.style.width = r1c1TableWidth;
+                if (r0c0Table) {
+                    r0c0Table.style.width = r1c1TableWidth;
+                }
+
+                if (r0c1Table) {
+                    r0c1Table.style.width = r1c1TableWidth;
+                }
+
+                if (r1c0Table) {
+                    r1c0Table.style.width = r1c1TableWidth;
+                }
+            }
         }
     }
 
