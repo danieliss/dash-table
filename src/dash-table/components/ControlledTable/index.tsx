@@ -762,7 +762,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         Logger.trace(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
 
-        r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
+        const margin = parseFloat(ev.target.scrollLeft) + parseFloat(getComputedStyle(r0c1).marginRight);
+
+        r0c1.style.marginLeft = `${-margin}px`;
 
         this.updateUiViewport();
         this.handleDropdown();
