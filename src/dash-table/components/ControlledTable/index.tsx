@@ -274,8 +274,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             let lastWidth = currentWidth;
 
             do {
-                let width: string | null = null;
-
                 lastWidth = currentWidth
 
                 // Force first column containers width to match visible portion of table
@@ -284,26 +282,23 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     const lastTdBounds = lastVisibleTd.getBoundingClientRect();
                     currentWidth = lastTdBounds.right - r1c0FragmentBounds.left;
 
-                    width = `${currentWidth}px`;
+                    const width = `${currentWidth}px`;
 
                     r0c0.style.width = width;
                     r1c0.style.width = width;
                 }
 
                 // Force second column containers width to match visible portion of table
-                if (width !== null) {
+                const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
+                if (firstVisibleTd) {
+                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
 
-                    const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
-                    if (firstVisibleTd) {
-                        const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                        const firstTdBounds = firstVisibleTd.getBoundingClientRect();
-
-                        const width2 = firstTdBounds.left - r1c1FragmentBounds.left;
-                        r0c1.style.marginLeft = `-${width2}`;
-                        r0c1.style.marginRight = `${width2}`;
-                        r1c1.style.marginLeft = `-${width2}`;
-                        r1c1.style.marginRight = `${width2}`;
-                    }
+                    const width2 = firstTdBounds.left - r1c1FragmentBounds.left;
+                    r0c1.style.marginLeft = `-${width2}`;
+                    r0c1.style.marginRight = `${width2}`;
+                    r1c1.style.marginLeft = `-${width2}`;
+                    r1c1.style.marginRight = `${width2}`;
                 }
 
                 it++;
@@ -321,10 +316,22 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         Array.from(r0c1.querySelectorAll('tr:first-of-type > *')).forEach((r0Cell, index) => {
             const r1Cell = r1Cells[index] as HTMLElement;
 
-            const width = `${r1Cell.getBoundingClientRect().width}px`;
-            (r0Cell as HTMLElement).style.width = width;
-            (r0Cell as HTMLElement).style.minWidth = width;
-            (r0Cell as HTMLElement).style.maxWidth = width;
+            const width = r1Cell.getBoundingClientRect().width;
+            let widthStyle = `${width}px`;
+            (r0Cell as HTMLElement).style.width = widthStyle;
+            (r0Cell as HTMLElement).style.minWidth = widthStyle;
+            (r0Cell as HTMLElement).style.maxWidth = widthStyle;
+            (r0Cell as HTMLElement).style.boxSizing = 'border-box';
+
+            // Firefox mishandles padding/borders in size calculation when setting it explicitly
+            const delta = r0Cell.getBoundingClientRect().width - width;
+
+            if (delta) {
+                widthStyle = `${width - delta}px`;
+                (r0Cell as HTMLElement).style.width = widthStyle;
+                (r0Cell as HTMLElement).style.minWidth = widthStyle;
+                (r0Cell as HTMLElement).style.maxWidth = widthStyle;
+            }
         });
     }
 
