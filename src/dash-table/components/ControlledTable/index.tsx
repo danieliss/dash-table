@@ -269,11 +269,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
             const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
 
-            // const r0c0Table = r0c0.querySelector('table');
-            const r0c1Table = r0c1.querySelector('table');
-            // const r1c0Table = r1c0.querySelector('table');
-            const r1c1Table = r1c1.querySelector('table');
-
             let it = 0;
             let currentWidth = r1c0.getBoundingClientRect().width;
             let lastWidth = currentWidth;
@@ -304,23 +299,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     r0c1.style.marginRight = `${width}px`;
                     r1c1.style.marginLeft = `${-width}px`;
                     r1c1.style.marginRight = `${width}px`;
-                }
-
-                // Make all fragment tables the same width
-                if (r1c1Table) {
-                    const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
-
-                    // if (r0c0Table) {
-                    //     r0c0Table.style.width = r1c1TableWidth;
-                    // }
-
-                    if (r0c1Table) {
-                        r0c1Table.style.width = r1c1TableWidth;
-                    }
-
-                    // if (r1c0Table) {
-                    //     r1c0Table.style.width = r1c1TableWidth;
-                    // }
                 }
 
                 it++;
