@@ -137,7 +137,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             setProps({ active_cell: selected_cells[0] });
         }
 
-        this.applyStyle();
+        this.updateUiViewport();
         this.handleResize();
     }
 
@@ -149,7 +149,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     componentDidUpdate() {
         this.updateStylesheet();
-        this.applyStyle();
+        this.updateUiViewport();
         this.handleResize();
         this.handleDropdown();
         this.adjustTooltipPosition();
@@ -248,6 +248,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
+
         // Adjust [fixed columns/fixed rows combo] to fixed rows height
         let trs = r0c1.querySelectorAll('tr');
         Array.from(r0c0.querySelectorAll('tr')).forEach((tr, index) => {
@@ -267,13 +268,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         if (fixed_columns) {
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
-            const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
 
             let it = 0;
             let currentWidth = r1c0.getBoundingClientRect().width;
             let lastWidth = currentWidth;
 
             do {
+                let width: string | null = null;
+
                 lastWidth = currentWidth
 
                 // Force first column containers width to match visible portion of table
@@ -282,23 +284,26 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     const lastTdBounds = lastVisibleTd.getBoundingClientRect();
                     currentWidth = lastTdBounds.right - r1c0FragmentBounds.left;
 
-                    const width = `${currentWidth}px`;
+                    width = `${currentWidth}px`;
 
                     r0c0.style.width = width;
                     r1c0.style.width = width;
                 }
 
                 // Force second column containers width to match visible portion of table
-                if (firstVisibleTd) {
-                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+                if (width !== null) {
 
-                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
+                    const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
+                    if (firstVisibleTd) {
+                        const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                        const firstTdBounds = firstVisibleTd.getBoundingClientRect();
 
-                    r0c1.style.marginLeft = `${-width}px`;
-                    r0c1.style.marginRight = `${width}px`;
-                    r1c1.style.marginLeft = `${-width}px`;
-                    r1c1.style.marginRight = `${width}px`;
+                        const width2 = firstTdBounds.left - r1c1FragmentBounds.left;
+                        r0c1.style.marginLeft = `-${width2}`;
+                        r0c1.style.marginRight = `${width2}`;
+                        r1c1.style.marginLeft = `-${width2}`;
+                        r1c1.style.marginRight = `${width2}`;
+                    }
                 }
 
                 it++;
@@ -311,6 +316,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 }
             } while (true);
         }
+
+        const r1Cells = r1c1.querySelectorAll('tr:first-of-type > *');
+        Array.from(r0c1.querySelectorAll('tr:first-of-type > *')).forEach((r0Cell, index) => {
+            const r1Cell = r1Cells[index] as HTMLElement;
+
+            const width = `${r1Cell.getBoundingClientRect().width}px`;
+            (r0Cell as HTMLElement).style.width = width;
+            (r0Cell as HTMLElement).style.minWidth = width;
+            (r0Cell as HTMLElement).style.maxWidth = width;
+        });
     }
 
     get $el() {
@@ -668,87 +683,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             page_action === TableAction.Native &&
             page_size < data.length
         ) || page_action === TableAction.Custom;
-    }
-
-    applyStyle = () => {
-        const {
-            fixed_columns,
-            fixed_rows,
-            row_deletable,
-            row_selectable
-        } = this.props;
-
-        const { r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
-
-        this.updateUiViewport();
-
-        if (row_deletable) {
-            this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.dash-delete-cell`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-        }
-
-        if (row_selectable) {
-            this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.dash-select-cell`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-        }
-
-        // Adjust the width of the fixed row header
-        if (fixed_rows) {
-            Array.from(r1c1.querySelectorAll('tr:first-of-type td.dash-cell, tr:first-of-type th.dash-header')).forEach(td => {
-                const classname = td.className.split(' ')[1];
-                const style = getComputedStyle(td);
-                const width = style.width;
-
-                this.stylesheet.setRule(
-                    `.dash-fixed-row:not(.dash-fixed-column) th.${classname}`,
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
-                );
-            });
-        }
-
-        // Adjust the width of the fixed row / fixed columns header
-        if (fixed_columns && fixed_rows) {
-            Array.from(r1c0.querySelectorAll('tr:first-of-type td.dash-cell, tr:first-of-type th.dash-header')).forEach(td => {
-                const classname = td.className.split(' ')[1];
-                const style = getComputedStyle(td);
-                const width = style.width;
-
-                this.stylesheet.setRule(
-                    `.dash-fixed-column.dash-fixed-row th.${classname}`,
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
-                );
-            });
-        }
-
-        // Adjust widths of row deletable/row selectable headers
-        const subTable = fixed_rows && !fixed_columns ? r1c1 : r1c0;
-
-        if (row_deletable) {
-            Array.from(subTable.querySelectorAll('tr:first-of-type td.dash-delete-cell')).forEach(td => {
-                const style = getComputedStyle(td);
-                const width = style.width;
-
-                this.stylesheet.setRule(
-                    'th.dash-delete-header',
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
-                );
-            });
-        }
-        if (row_selectable) {
-            Array.from(subTable.querySelectorAll('tr:first-of-type td.dash-select-cell')).forEach(td => {
-                const style = getComputedStyle(td);
-                const width = style.width;
-
-                this.stylesheet.setRule(
-                    'th.dash-select-header',
-                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
-                );
-            });
-        }
     }
 
     handleDropdown = () => {
