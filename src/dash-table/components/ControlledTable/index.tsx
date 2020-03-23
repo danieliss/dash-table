@@ -294,11 +294,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     const r1c1FragmentBounds = r1c1.getBoundingClientRect();
                     const firstTdBounds = firstVisibleTd.getBoundingClientRect();
 
-                    const width2 = firstTdBounds.left - r1c1FragmentBounds.left;
-                    r0c1.style.marginLeft = `-${width2}`;
-                    r0c1.style.marginRight = `${width2}`;
-                    r1c1.style.marginLeft = `-${width2}`;
-                    r1c1.style.marginRight = `${width2}`;
+                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
+                    r0c1.style.marginLeft = `-${width}px`;
+                    r0c1.style.marginRight = `${width}px`;
+                    r1c1.style.marginLeft = `-${width}px`;
+                    r1c1.style.marginRight = `${width}px`;
                 }
 
                 it++;
@@ -316,21 +316,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         Array.from(r0c1.querySelectorAll('tr:first-of-type > *')).forEach((r0Cell, index) => {
             const r1Cell = r1Cells[index] as HTMLElement;
 
-            const width = r1Cell.getBoundingClientRect().width;
-            let widthStyle = `${width}px`;
-            (r0Cell as HTMLElement).style.width = widthStyle;
-            (r0Cell as HTMLElement).style.minWidth = widthStyle;
-            (r0Cell as HTMLElement).style.maxWidth = widthStyle;
+            let width = r1Cell.getBoundingClientRect().width;
+            (r0Cell as HTMLElement).style.width = `${width}px`;;
+            (r0Cell as HTMLElement).style.minWidth = `${width}px`;;
+            (r0Cell as HTMLElement).style.maxWidth = `${width}px`;;
             (r0Cell as HTMLElement).style.boxSizing = 'border-box';
 
             // Firefox mishandles padding/borders in size calculation when setting it explicitly
             const delta = r0Cell.getBoundingClientRect().width - width;
-
             if (delta) {
-                widthStyle = `${width - delta}px`;
-                (r0Cell as HTMLElement).style.width = widthStyle;
-                (r0Cell as HTMLElement).style.minWidth = widthStyle;
-                (r0Cell as HTMLElement).style.maxWidth = widthStyle;
+                width -= delta;
+                (r0Cell as HTMLElement).style.width = `${width}px`;;
+                (r0Cell as HTMLElement).style.minWidth = `${width}px`;;
+                (r0Cell as HTMLElement).style.maxWidth = `${width}px`;;
             }
         });
     }
