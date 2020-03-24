@@ -312,17 +312,21 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             } while (true);
         }
 
-        const r1CellWidths = Array.from(
+        const r1c0CellWidths = Array.from(
+            r1c0.querySelectorAll('tr:first-of-type > *')
+        ).map(c => c.getBoundingClientRect().width);
+
+        const r1c1CellWidths = Array.from(
             r1c1.querySelectorAll('tr:first-of-type > *')
         ).map(c => c.getBoundingClientRect().width);
 
         Array.from<HTMLElement>(
             r0c0.querySelectorAll('tr:first-of-type > *')
-        ).forEach((c, i) => this.setCellWidth(c, r1CellWidths[i]));
+        ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
 
         Array.from<HTMLElement>(
             r0c1.querySelectorAll('tr:first-of-type > *')
-        ).forEach((c, i) => this.setCellWidth(c, r1CellWidths[i]));
+        ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
     }
 
     get $el() {
