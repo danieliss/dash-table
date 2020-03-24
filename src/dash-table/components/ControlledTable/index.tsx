@@ -312,25 +312,30 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             } while (true);
         }
 
-        const r1Cells = r1c1.querySelectorAll('tr:first-of-type > *');
-        Array.from(r0c1.querySelectorAll('tr:first-of-type > *')).forEach((r0Cell, index) => {
-            const r1Cell = r1Cells[index] as HTMLElement;
+        const setCellWidth = (cell: HTMLElement, width: number) => {
+            cell.style.width = `${width}px`;
+            cell.style.minWidth = `${width}px`;
+            cell.style.maxWidth = `${width}px`;
+            cell.style.boxSizing = 'border-box';
 
-            let width = r1Cell.getBoundingClientRect().width;
-            (r0Cell as HTMLElement).style.width = `${width}px`;;
-            (r0Cell as HTMLElement).style.minWidth = `${width}px`;;
-            (r0Cell as HTMLElement).style.maxWidth = `${width}px`;;
-            (r0Cell as HTMLElement).style.boxSizing = 'border-box';
-
-            // Firefox mishandles padding/borders in size calculation when setting it explicitly
-            const delta = r0Cell.getBoundingClientRect().width - width;
+            const delta = cell.getBoundingClientRect().width - width;
             if (delta) {
-                width -= delta;
-                (r0Cell as HTMLElement).style.width = `${width}px`;;
-                (r0Cell as HTMLElement).style.minWidth = `${width}px`;;
-                (r0Cell as HTMLElement).style.maxWidth = `${width}px`;;
+                cell.style.width = `${width - delta}px`;
+                cell.style.minWidth = `${width - delta}px`;
+                cell.style.maxWidth = `${width - delta}px`;
             }
-        });
+        };
+
+        const r1Cells = r1c1.querySelectorAll('tr:first-of-type > *');
+        const r0c0Cells = Array.from(r0c0.querySelectorAll('tr:first-of-type > *'));
+        const r0c1Cells = Array.from(r0c1.querySelectorAll('tr:first-of-type > *'));
+
+        for (let i = 0; i < r0c0Cells.length; ++i) {
+            const r1CellWidth = r1Cells[i].getBoundingClientRect().width;
+
+            setCellWidth(r0c0Cells[i] as HTMLElement, r1CellWidth);
+            setCellWidth(r0c1Cells[i] as HTMLElement, r1CellWidth);
+        }
     }
 
     get $el() {
