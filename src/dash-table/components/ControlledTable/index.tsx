@@ -312,30 +312,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             } while (true);
         }
 
-        const setCellWidth = (cell: HTMLElement, width: number) => {
-            cell.style.width = `${width}px`;
-            cell.style.minWidth = `${width}px`;
-            cell.style.maxWidth = `${width}px`;
-            cell.style.boxSizing = 'border-box';
+        const r1CellWidths = Array.from(
+            r1c1.querySelectorAll('tr:first-of-type > *')
+        ).map(c => c.getBoundingClientRect().width);
 
-            const delta = cell.getBoundingClientRect().width - width;
-            if (delta) {
-                cell.style.width = `${width - delta}px`;
-                cell.style.minWidth = `${width - delta}px`;
-                cell.style.maxWidth = `${width - delta}px`;
-            }
-        };
+        Array.from<HTMLElement>(
+            r0c0.querySelectorAll('tr:first-of-type > *')
+        ).forEach((c, i) => this.setCellWidth(c, r1CellWidths[i]));
 
-        const r1Cells = r1c1.querySelectorAll('tr:first-of-type > *');
-        const r0c0Cells = Array.from(r0c0.querySelectorAll('tr:first-of-type > *'));
-        const r0c1Cells = Array.from(r0c1.querySelectorAll('tr:first-of-type > *'));
-
-        for (let i = 0; i < r0c0Cells.length; ++i) {
-            const r1CellWidth = r1Cells[i].getBoundingClientRect().width;
-
-            setCellWidth(r0c0Cells[i] as HTMLElement, r1CellWidth);
-            setCellWidth(r0c1Cells[i] as HTMLElement, r1CellWidth);
-        }
+        Array.from<HTMLElement>(
+            r0c1.querySelectorAll('tr:first-of-type > *')
+        ).forEach((c, i) => this.setCellWidth(c, r1CellWidths[i]));
     }
 
     get $el() {
@@ -939,6 +926,20 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             const cell = table.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
 
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
+        }
+    }
+
+    private setCellWidth(cell: HTMLElement, width: number) {
+        cell.style.width = `${width}px`;
+        cell.style.minWidth = `${width}px`;
+        cell.style.maxWidth = `${width}px`;
+        cell.style.boxSizing = 'border-box';
+
+        const delta = cell.getBoundingClientRect().width - width;
+        if (delta) {
+            cell.style.width = `${width - delta}px`;
+            cell.style.minWidth = `${width - delta}px`;
+            cell.style.maxWidth = `${width - delta}px`;
         }
     }
 
